@@ -1,0 +1,1 @@
+https://architecturenotes.co/p/redis

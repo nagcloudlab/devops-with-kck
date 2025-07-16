@@ -29,7 +29,8 @@ public class HelloServiceApplication {
 	}
 
 	@GetMapping("/hello/postgres")
-	public synchronized String helloPostgres() {
+	@Transactional(isolation = Isolation.READ_COMMITTED)
+	public String helloPostgres() {
 		// Increment the request count
 		int reCount = reqCount.incrementAndGet();
 		System.out.println("Request count: " + reCount);
