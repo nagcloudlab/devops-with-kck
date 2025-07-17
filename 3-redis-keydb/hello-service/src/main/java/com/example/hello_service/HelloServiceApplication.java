@@ -1,6 +1,5 @@
 package com.example.hello_service;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.boot.SpringApplication;
@@ -21,16 +20,17 @@ public class HelloServiceApplication {
 
 	private final HelloCountRepository helloCountRepository;
 	private final RedisTemplate<String, Long> redisTemplate;
+	private final RedisTemplate<String, Long> keydbTemplate;
 
 	public HelloServiceApplication(HelloCountRepository helloCountRepository,
-			RedisTemplate<String, Long> redisTemplate) {
+			RedisTemplate<String, Long> redisTemplate, RedisTemplate<String, Long> keydbTemplate) {
 		this.helloCountRepository = helloCountRepository;
 		this.redisTemplate = redisTemplate;
+		this.keydbTemplate = keydbTemplate;
 	}
 
 	@GetMapping("/hello/postgres")
-	@Transactional(isolation = Isolation.READ_COMMITTED)
-	public String helloPostgres() {
+	public synchronized String helloPostgres() {
 		// Increment the request count
 		int reCount = reqCount.incrementAndGet();
 		System.out.println("Request count: " + reCount);
@@ -59,6 +59,29 @@ public class HelloServiceApplication {
 
 		// Use Redis to store and retrieve the count
 		String key = "user1:hello:count"; // Key for Redis
+		// Long count = redisTemplate.opsForValue().get(key); // GET user1:hello:count
+		// if (count == null) {
+		// count = 0L; // Initialize if not present
+		// }
+		// count++;
+		// redisTemplate.opsForValue().set(key, count); // SET user1:hello:count n
+
+		Long count = redisTemplate.opsForValue().increment(key, 1); // INCR user1:hello:count
+		if (count == null) {
+			count = 0L; // Initialize if not present
+		}
+		// Return the message with the count
+		return "Hello, World! This is message number: " + count;
+	}
+
+	@GetMapping("/hello/keydb")
+	public String hellokeydb() {
+		// Increment the request count
+		int reCount = reqCount.incrementAndGet();
+		System.out.println("Request count: " + reCount);
+
+		// Use Redis to store and retrieve the count
+		String key = "user1:hello:count"; // Key for Redis
 		// Long count = redisTemplate.opsForValue().get(key);
 		// if (count == null) {
 		// count = 0L; // Initialize if not present
@@ -66,7 +89,7 @@ public class HelloServiceApplication {
 		// count++;
 		// redisTemplate.opsForValue().set(key, count);
 
-		Long count = redisTemplate.opsForValue().increment(key, 1);
+		Long count = keydbTemplate.opsForValue().increment(key, 1);
 		if (count == null) {
 			count = 0L; // Initialize if not present
 		}

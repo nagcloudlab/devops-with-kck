@@ -9,7 +9,7 @@ import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
-public class RedisConfiguration {
+public class RedisKeyDbConfiguration {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
@@ -19,9 +19,27 @@ public class RedisConfiguration {
     }
 
     @Bean
+    public RedisConnectionFactory keydbConnectionFactory() {
+        // Configure and return the Redis connection factory
+        // This is a placeholder; actual implementation will depend on your Redis setup
+        return new LettuceConnectionFactory("localhost", 6380);
+    }
+
+    @Bean
     public RedisTemplate<String, Long> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, Long> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory);
+        // Additional configuration can be done here if needed
+        // e.g., setting serializers for keys and values
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new GenericToStringSerializer<>(Long.class));
+        return template;
+    }
+
+    @Bean
+    public RedisTemplate<String, Long> keydbTemplate(RedisConnectionFactory keydbConnectionFactory) {
+        RedisTemplate<String, Long> template = new RedisTemplate<>();
+        template.setConnectionFactory(keydbConnectionFactory);
         // Additional configuration can be done here if needed
         // e.g., setting serializers for keys and values
         template.setKeySerializer(new StringRedisSerializer());
