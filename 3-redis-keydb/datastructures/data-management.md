@@ -60,7 +60,7 @@ Command to find keys that match a pattern:
 KEYS employe:* ( not recommened, blocking command)
 
 Use SCAN for better performance in production environments:
-SCAN 0 MATCH employe:* COUNT 10
+SCAN 2 MATCH employe:* COUNT 2
 
 Command to get information about the keys in the current database:
 INFO keyspace
