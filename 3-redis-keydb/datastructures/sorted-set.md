@@ -38,8 +38,4 @@ ZRANK leaderboard "Charlie"
 ZREVRANK leaderboard "Charlie"
 # Output: 0
 
-# Get members by lexicographical range
-ZADD fruits 0 "apple" 0 "banana" 0 "cherry"
-ZRANGEBYLEX fruits "[a" "[c"
-# Output: ["apple", "banana", "cherry"]
 

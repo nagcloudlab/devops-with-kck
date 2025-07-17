@@ -23,6 +23,8 @@ SCARD fruits
 SPOP fruits
 # Output: "apple" (the actual output can be any random member)
 
+
+
 # Move a member from one set to another
 SADD colors1 "red" "blue"
 SADD colors2 "green"
