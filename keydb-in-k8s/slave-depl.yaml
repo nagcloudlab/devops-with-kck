@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keydb-slave-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keydb-slave-1
+  template:
+    metadata:
+      labels:
+        app: keydb-slave-1
+    spec:
+      containers:
+      - name: keydb-slave
+        image: eqalpha/keydb:latest
+        ports:
+        - containerPort: 6379
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keydb-slave-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keydb-slave-2
+  template:
+    metadata:
+      labels:
+        app: keydb-slave-2
+    spec:
+      containers:
+      - name: keydb-slave
+        image: eqalpha/keydb:latest
+        ports:
+        - containerPort: 6379
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keydb-slave-3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keydb-slave-3
+  template:
+    metadata:
+      labels:
+        app: keydb-slave-3
+    spec:
+      containers:
+      - name: keydb-slave
+        image: eqalpha/keydb:latest
+        ports:
+        - containerPort: 6379

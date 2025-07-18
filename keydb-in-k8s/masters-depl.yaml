@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keydb-master-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keydb-master-1
+  template:
+    metadata:
+      labels:
+        app: keydb-master-1
+    spec:
+      containers:
+      - name: keydb-master
+        image: eqalpha/keydb:latest
+        ports:
+        - containerPort: 6379
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keydb-master-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keydb-master-2
+  template:
+    metadata:
+      labels:
+        app: keydb-master-2
+    spec:
+      containers:
+      - name: keydb-master
+        image: eqalpha/keydb:latest
+        ports:
+        - containerPort: 6379
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keydb-master-3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keydb-master-3
+  template:
+    metadata:
+      labels:
+        app: keydb-master-3
+    spec:
+      containers:
+      - name: keydb-master
+        image: eqalpha/keydb:latest
+        ports:
+        - containerPort: 6379
