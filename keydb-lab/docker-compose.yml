@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  keydb-node1:
+    image: eqalpha/keydb
+    container_name: keydb-node1
+    volumes:
+      - ./keydb-node1.conf:/etc/keydb/keydb.conf
+    command: keydb-server /etc/keydb/keydb.conf
+    ports:
+      - "6379:6379"
+    networks:
+      - keydbnet
+
+  keydb-node2:
+    image: eqalpha/keydb
+    container_name: keydb-node2
+    volumes:
+      - ./keydb-node2.conf:/etc/keydb/keydb.conf
+    command: keydb-server /etc/keydb/keydb.conf
+    ports:
+      - "6380:6379"
+    networks:
+      - keydbnet
+
+  keydb-node3:
+    image: eqalpha/keydb
+    container_name: keydb-node3
+    volumes:
+      - ./keydb-node3.conf:/etc/keydb/keydb.conf
+    command: keydb-server /etc/keydb/keydb.conf
+    ports:
+      - "6381:6379"
+    networks:
+      - keydbnet
+
+networks:
+  keydbnet:
+    driver: bridge

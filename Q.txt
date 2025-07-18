@@ -1,0 +1,12 @@
+Redis with sentinels
+
+1-Master , 2 replicas
+
+scenario-1: 
+
+   Master - Up
+   replica-1 - Up
+   replica-2 - Down
+
+    
+     

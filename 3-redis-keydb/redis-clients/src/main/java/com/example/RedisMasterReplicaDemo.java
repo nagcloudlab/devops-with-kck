@@ -7,30 +7,39 @@ public class RedisMasterReplicaDemo {
     public static void main(String[] args) throws InterruptedException {
 
         // Connect to master and replica
-        Jedis master = new Jedis("localhost", 6379);
-        Jedis replica = new Jedis("localhost", 6380);
+        Jedis master1 = new Jedis("localhost", 6380);
+        Jedis replica1 = new Jedis("localhost", 6381);
 
         System.out.println("Connected to master and replica...");
 
         int i = 1;
 
         while (true) {
-            String key = "counter";
+            // Generate a key-value pair
+            String key = "counter-" + i;
             String value = "val-" + i + " @ " + LocalDateTime.now();
 
-            // WRITE to master
-            master.set(key, value);
-            System.out.println("WROTE to master: " + value);
+            try {
+                // WRITE to master
+                master1.set(key, value);
+                System.out.println("WROTE to master1: " + value);
+            } catch (Exception e) {
+                // Attempt to write to the second master if the first fails
+                System.out.println("Failed to write to master1" + e.getMessage());
+            }
 
             // Wait a bit for replication to occur
             Thread.sleep(100);
 
             // READ from replica
-            String replicaValue = replica.get(key);
-            System.out.println("READ from replica: " + replicaValue);
-
+            try {
+                String replicaValue = replica1.get(key);
+                System.out.println("READ from replica1: " + replicaValue);
+            } catch (Exception e) {
+                System.out.println("Failed to read from replica1: " + e.getMessage());
+            }
             i++;
-            Thread.sleep(1000); // 1 second interval
+            Thread.sleep(100); // Sleep to simulate time between writes
         }
     }
 }

@@ -1,0 +1,9 @@
+
+
+
+3 redis & 3 sentinels
+------------------------
+
+Master->UP
+Slave->UP
+Slave->UP
