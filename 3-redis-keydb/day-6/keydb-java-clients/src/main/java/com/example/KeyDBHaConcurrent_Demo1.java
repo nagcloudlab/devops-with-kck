@@ -66,7 +66,7 @@ public class KeyDBHaConcurrent_Demo1 {
                                 LocalDateTime.now(), node, e.getMessage());
                     }
                 }
-                Thread.sleep(1000);
+                Thread.sleep(100);
             }
         });
     }

@@ -1,0 +1,13 @@
+
+
+
+Redis/Keydb deployment architecture(s) based on CAP theorem:
+
+- standalone
+- master-slave
+- master-replica with sentinel ( for failover)
+- master-master ( keydb feature only)
+- cluster mode
+
+
+Redis Cook book examples 

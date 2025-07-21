@@ -23,7 +23,6 @@ services:
     command: >
       keydb-server
       --replicaof keydb-master 6379
-      --replica-serve-stale-data no
     networks:
       keydbnet:
         ipv4_address: 172.18.0.21

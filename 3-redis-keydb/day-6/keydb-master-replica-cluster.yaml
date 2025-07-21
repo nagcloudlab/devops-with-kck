@@ -1,0 +1,74 @@
+version: "3.8"
+services:
+  keydb-node1:
+    image: eqalpha/keydb-with-nettools
+    container_name: keydb-node1
+    command: keydb-server --port 6379 --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    ports:
+      - "6379:6379"
+      - "16379:16379"
+    networks:
+      keydbnet:
+        ipv4_address: 172.18.0.11
+
+  keydb-node2:
+    image: eqalpha/keydb-with-nettools
+    container_name: keydb-node2
+    command: keydb-server --port 6379 --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    ports:
+      - "6380:6379"
+      - "16380:16379"
+    networks:
+      keydbnet:
+        ipv4_address: 172.18.0.12
+
+  keydb-node3:
+    image: eqalpha/keydb-with-nettools
+    container_name: keydb-node3
+    command: keydb-server --port 6379 --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    ports:
+      - "6381:6379"
+      - "16381:16379"
+    networks:
+      keydbnet:
+        ipv4_address: 172.18.0.13
+
+  keydb-node4:
+    image: eqalpha/keydb-with-nettools
+    container_name: keydb-node4
+    command: keydb-server --port 6379 --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    ports:
+      - "6382:6379"
+      - "16382:16379"
+    networks:
+      keydbnet:
+        ipv4_address: 172.18.0.14
+
+  keydb-node5:
+    image: eqalpha/keydb-with-nettools
+    container_name: keydb-node5
+    command: keydb-server --port 6379 --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    ports:
+      - "6383:6379"
+      - "16383:16379"
+    networks:
+      keydbnet:
+        ipv4_address: 172.18.0.15
+
+  keydb-node6:
+    image: eqalpha/keydb-with-nettools
+    container_name: keydb-node6
+    command: keydb-server --port 6379 --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    ports:
+      - "6384:6379"
+      - "16384:16379"
+    networks:
+      keydbnet:
+        ipv4_address: 172.18.0.16
+
+networks:
+  keydbnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
