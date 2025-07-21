@@ -1,0 +1,48 @@
+version: "3.8"
+services:
+  keydb-node1:
+    image: eqalpha/keydb-with-iptables
+    container_name: keydb-node1
+    ports:
+      - "6379:6379"
+    command: >
+      keydb-server
+      --multi-master yes
+      --active-replica yes
+      --replicaof keydb-node2 6379
+      --requirepass mypass
+      --masterauth mypass
+    networks:
+      keydbnet:
+        ipv4_address: 172.18.0.2
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    user: root
+
+  keydb-node2:
+    image: eqalpha/keydb-with-iptables
+    container_name: keydb-node2
+    ports:
+      - "6380:6379"
+    command: >
+      keydb-server
+      --multi-master yes
+      --active-replica yes
+      --replicaof keydb-node1 6379
+      --requirepass mypass
+      --masterauth mypass
+    networks:
+      keydbnet:
+        ipv4_address: 172.18.0.3
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    user: root
+
+networks:
+  keydbnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16

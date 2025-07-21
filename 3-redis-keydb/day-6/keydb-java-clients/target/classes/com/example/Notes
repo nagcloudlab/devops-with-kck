@@ -1,0 +1,19 @@
+
+
+
+Master - Replica
+-----------------
+
+    for Strong Cosistency  ( less Availability )
+
+        Master to accept write oprtations
+            - make sure connected with min number of replicas with Lag
+            
+    for Eventual consistency  ( for better availiblity )   
+
+        -> master should accet all writes even if no replicas connected.
+
+    -----------------------------
+
+    at application side, for strong consistency, we can use waitReplicas() ( WAIT ) method
+    for certain keys    

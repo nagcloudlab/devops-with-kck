@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+  keydb-master:
+    image: eqalpha/keydb-with-nettools:latest
+    container_name: keydb-master
+    ports:
+      - "6379:6379"
+    command: >
+      keydb-server
+    networks:
+      keydbnet:
+        ipv4_address: 172.18.0.20
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    user: root
+
+  keydb-replica:
+    image: eqalpha/keydb-with-nettools:latest
+    container_name: keydb-replica
+    ports:
+      - "6380:6379"
+    command: >
+      keydb-server
+      --replicaof keydb-master 6379
+      --replica-serve-stale-data no
+    networks:
+      keydbnet:
+        ipv4_address: 172.18.0.21
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    user: root
+
+networks:
+  keydbnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16

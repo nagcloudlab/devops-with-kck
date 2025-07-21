@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  keydb-standalone:
+    image: eqalpha/keydb-with-nettools:latest
+    container_name: keydb-standalone
+    ports:
+      - "6379:6379"
+    command: >
+      keydb-server
+    networks:
+      keydbnet:
+        ipv4_address: 172.18.0.10
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    user: root
+
+networks:
+  keydbnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16

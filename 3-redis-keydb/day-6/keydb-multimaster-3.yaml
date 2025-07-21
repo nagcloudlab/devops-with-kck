@@ -1,0 +1,65 @@
+version: "3.8"
+services:
+  keydb-mm1:
+    image: eqalpha/keydb-with-nettools
+    container_name: keydb-mm1
+    ports:
+      - "6379:6379"
+    command: >
+      keydb-server
+      --multi-master yes
+      --active-replica yes
+      --replicaof keydb-mm2 6379
+      --replicaof keydb-mm3 6379
+    networks:
+      keydbnet:
+        ipv4_address: 172.18.0.40
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    user: root
+
+  keydb-mm2:
+    image: eqalpha/keydb-with-nettools
+    container_name: keydb-mm2
+    ports:
+      - "6380:6379"
+    command: >
+      keydb-server
+      --multi-master yes
+      --active-replica yes
+      --replicaof keydb-mm1 6379
+      --replicaof keydb-mm3 6379
+    networks:
+      keydbnet:
+        ipv4_address: 172.18.0.41
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    user: root
+
+  keydb-mm3:
+    image: eqalpha/keydb-with-nettools
+    container_name: keydb-mm3
+    ports:
+      - "6381:6379"
+    command: >
+      keydb-server
+      --multi-master yes
+      --active-replica yes
+      --replicaof keydb-mm1 6379
+      --replicaof keydb-mm2 6379
+    networks:
+      keydbnet:
+        ipv4_address: 172.18.0.42
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    user: root
+
+networks:
+  keydbnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
