@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 public class KeyDBHaConcurrent_Demo1 {
-    static final List<String> NODES = Arrays.asList("localhost:6379", "localhost:6380", "localhost:6381");
+    static final List<String> NODES = Arrays.asList("localhost:6379");
     static final String PASSWORD = "mypass";
     static final Map<String, JedisPool> POOLS = new ConcurrentHashMap<>();
 
@@ -31,43 +31,32 @@ public class KeyDBHaConcurrent_Demo1 {
 
         // Writer Thread
         executor.submit(() -> {
-            int counter = 0;
+            long counter = 0;
             Random rand = new Random();
+            Jedis jedis = null;
             while (true) {
-                String node = NODES.get(rand.nextInt(NODES.size()));
-                JedisPool pool = POOLS.get(node);
-                try (Jedis jedis = pool.getResource()) {
+                // String node = NODES.get(rand.nextInt(NODES.size()));
+                // JedisPool pool = POOLS.get(node);
+                jedis = new Jedis("localhost", 6379); // create new connection to redis
+                // try (jedis) {
+                try {
                     // jedis.auth(PASSWORD);
                     // jedis.waitReplicas(2, 5000);
-                    jedis.set("mykey", "value-" + counter);
+                    jedis.set("mykey-" + counter, "value-" + counter);
                     System.out.printf("[%s] [WRITE] mykey = value-%d to %s%n",
-                            LocalDateTime.now(), counter, node);
+                            LocalDateTime.now(), counter, "localhost:6379");
                     counter++;
                 } catch (Exception e) {
                     System.out.printf("[%s] [WRITE FAIL] %s: %s%n",
-                            LocalDateTime.now(), node, e.getMessage());
+                            LocalDateTime.now(), "localhost:6379", e.getMessage());
+                } finally {
+                    if (jedis != null) {
+                        jedis.close();
+                    }
                 }
-                Thread.sleep(1000);
             }
         });
 
-        // Reader Thread
-        executor.submit(() -> {
-            while (true) {
-                for (String node : NODES) {
-                    JedisPool pool = POOLS.get(node);
-                    try (Jedis jedis = pool.getResource()) {
-                        // jedis.auth(PASSWORD);
-                        String value = jedis.get("mykey");
-                        System.out.printf("[%s] [READ]  mykey from %s: %s%n",
-                                LocalDateTime.now(), node, value);
-                    } catch (Exception e) {
-                        System.out.printf("[%s] [READ FAIL] %s: %s%n",
-                                LocalDateTime.now(), node, e.getMessage());
-                    }
-                }
-                Thread.sleep(100);
-            }
-        });
     }
+
 }
