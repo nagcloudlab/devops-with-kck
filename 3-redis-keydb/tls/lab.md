@@ -2,14 +2,12 @@ mkdir redis-certs
 cd redis-certs
 
 openssl genrsa -out ca.key 4096
-
 openssl req -x509 -new -nodes -key ca.key -sha256 -days 3650 -out ca.crt \
   -subj "/C=IN/ST=State/L=City/O=YourOrg/CN=Redis-Test-CA"
 
 openssl genrsa -out redis.key 2048
 
 openssl req -new -key redis.key -out redis.csr -subj "/C=IN/ST=State/L=City/O=YourOrg/CN=localhost"
-
 openssl x509 -req -in redis.csr -CA ca.crt -CAkey ca.key -CAcreateserial \
   -out redis.crt -days 3650 -sha256
 
