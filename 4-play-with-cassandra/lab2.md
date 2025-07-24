@@ -8,33 +8,22 @@ CREATE KEYSPACE ks1 WITH REPLICATION = {'class': 'NetworkTopologyStrategy', 'dc1
 DESCRIBE KEYSPACE ks1;
 
 CREATE TABLE ks1.users (
-    user_id UUID PRIMARY KEY,
+    user_id int,
     name TEXT,
-    email TEXT
+    email TEXT,
+    PRIMARY KEY (user_id)
 );
 
-INSERT INTO ks1.users (user_id, name, email) VALUES (uuid(), 'Alice', 'alice@mail.com');
-INSERT INTO ks1.users (user_id, name, email) VALUES (uuid(), 'Bob', 'bob@mail.com');
-INSERT INTO ks1.users (user_id, name, email) VALUES (uuid(), 'Charlie', 'charlie@mail.com');
+CONSISTENCY ALL;
+INSERT INTO ks1.users (user_id, name, email) VALUES (1, 'Alice', 'alice@mail.com');
+INSERT INTO ks1.users (user_id, name, email) VALUES (2, 'Bob', 'bob@mail.com');
+INSERT INTO ks1.users (user_id, name, email) VALUES (3, 'Charlie', 'charlie@mail.com');
+INSERT INTO ks1.users (user_id, name, email) VALUES (4, 'David', 'david@mail.com');
+INSERT INTO ks1.users (user_id, name, email) VALUES (5, 'Eve', 'eve@mail.com');
 
-SELECT * FROM ks1.users;
 
 CONSISTENCY ALL;
-
-INSERT INTO ks1.users (user_id, name, email) VALUES (uuid(), 'Dave', 'dave@mail.com');
-INSERT INTO ks1.users (user_id, name, email) VALUES (uuid(), 'Eve', 'eve@mail.com');
-INSERT INTO ks1.users (user_id, name, email) VALUES (uuid(), 'Frank', 'frank1@mail.com');
-
-
-docker exec -it cassandra1_dc1 nodetool getendpoints <keyspace> <table> <partition_key>
-docker exec -it cassandra1_dc1 nodetool getendpoints ks1 users <user_id>
-
-
-
-SELECT DISTINCT user_id FROM ks1.users;
-
-docker exec -it cassandra1_dc1 nodetool tablestats ks1
-
+SELECT * FROM ks1.users whERE user_id = 5;
 
 -----------------------------
 # SRE tasks
