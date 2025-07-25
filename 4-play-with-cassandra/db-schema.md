@@ -34,8 +34,8 @@ docker exec -it cassandra cqlsh
 
 ## Cassandra data Model Schema
 ```cql
-CREATE KEYSPACE IF NOT EXISTS banking WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1};
-CREATE TABLE IF NOT EXISTS banking.transactions (
+CREATE KEYSPACE txns_ks WITH REPLICATION = {'class': 'NetworkTopologyStrategy', 'replication_factor': 3};
+CREATE TABLE IF NOT EXISTS txns_ks.transactions (
     id uuid,
     account_number varchar,
     amount decimal,

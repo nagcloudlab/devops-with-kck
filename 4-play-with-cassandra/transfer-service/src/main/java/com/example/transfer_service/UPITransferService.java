@@ -1,5 +1,7 @@
 package com.example.transfer_service;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,15 +32,17 @@ public class UPITransferService {
         accountRepository.save(fromAccount);
         accountRepository.save(toAccount);
 
+        // ----------
+
         Transaction debTransaction = new Transaction();
         debTransaction.setAccountNumber(fromAccountNumber);
-        debTransaction.setAmount(-amount);
+        debTransaction.setAmount(new BigDecimal(amount));
         debTransaction.setTransactionType("DEBIT");
         transactionRepository.save(debTransaction);
 
         Transaction credTransaction = new Transaction();
         credTransaction.setAccountNumber(toAccountNumber);
-        credTransaction.setAmount(amount);
+        credTransaction.setAmount(new BigDecimal(amount));
         credTransaction.setTransactionType("CREDIT");
         transactionRepository.save(credTransaction);
 
