@@ -27,6 +27,6 @@ replay_pid*
 dump*
 
 
-/node*
+node*/
+apache-*/
 
-/apache*
