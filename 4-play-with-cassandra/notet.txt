@@ -1,0 +1,14 @@
+import org.springframework.data.cassandra.core.CassandraTemplate;
+import com.datastax.oss.driver.api.core.ConsistencyLevel;
+
+@Autowired
+private CassandraTemplate cassandraTemplate;
+
+public void saveWithCL(MyEntity entity) {
+    cassandraTemplate.setQueryOptions(
+        QueryOptions.builder()
+            .consistencyLevel(ConsistencyLevel.QUORUM)
+            .build()
+    );
+    cassandraTemplate.insert(entity);
+}

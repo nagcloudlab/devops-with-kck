@@ -4,7 +4,7 @@
 <!-- create keyspace ks1, dc1 with RF = 3 and dc2 with RF = 2; -->
 
 docker exec -it cassandra1_dc1  cqlsh
-CREATE KEYSPACE ks1 WITH REPLICATION = {'class': 'NetworkTopologyStrategy', 'dc1': 3, 'dc2': 2};
+CREATE KEYSPACE ks1 WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 3};
 DESCRIBE KEYSPACE ks1;
 
 CREATE TABLE ks1.users (
