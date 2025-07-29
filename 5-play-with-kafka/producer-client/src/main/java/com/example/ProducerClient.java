@@ -2,6 +2,7 @@ package com.example;
 
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -79,12 +80,14 @@ public class ProducerClient {
         List<String> transferTypes = List.of("NEFT", "IMPS", "UPI", "RTGS");
         String topic = "transfer-events";
 
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < Integer.MAX_VALUE; i++) {
 
             String key = transferTypes.get((int) (Math.random() * transferTypes.size()));
             // transfer event data in json format
             String value = "{\"event\":\"transfer\",\"amount\":1000,\"currency\":\"INR\"}";
-            ProducerRecord<String, String> record = new ProducerRecord<>(topic, 0, key, value);
+            // String value =
+            // "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n";
+            ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, value);
 
             // Send the record to the Kafka topic
             producer.send(record, (metadata, exception) -> {
@@ -95,6 +98,14 @@ public class ProducerClient {
                             metadata.topic(), metadata.partition(), metadata.offset());
                 }
             });
+
+            try {
+                TimeUnit.MILLISECONDS.sleep(1); // Simulate processing delay
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                System.out.println("Consumer interrupted.");
+            }
+
         }
         producer.flush(); // Ensure all records are sent before closing the producer
         producer.close(); // Close the producer to release resources
