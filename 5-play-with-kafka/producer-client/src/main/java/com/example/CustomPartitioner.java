@@ -16,13 +16,14 @@ public class CustomPartitioner implements org.apache.kafka.clients.producer.Part
             case "NEFT":
                 return 0; // Partition 0 for NEFT
             case "IMPS":
-                return 1; // Partition 1 for IMPS
+                return 0; // Partition 1 for IMPS
             case "UPI":
-                return 2; // Partition 2 for UPI
+                return 1; // Partition 2 for UPI
             case "RTGS":
-                return 1; // Partition 3 for RTGS
+                return 2; // Partition 3 for RTGS
             default:
-                return 0; // Default to partition 0 for unknown keys
+                // Default partitioning logic, e.g., round-robin
+                return Math.abs(keyString.hashCode()) % cluster.availablePartitionsForTopic(topic).size();
         }
     }
 

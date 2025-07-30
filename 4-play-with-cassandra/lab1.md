@@ -4,8 +4,17 @@
 <!-- create keyspace ks1, dc1 with RF = 3 and dc2 with RF = 2; -->
 
 docker exec -it cassandra1_dc1  cqlsh
-CREATE KEYSPACE ks1 WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 3};
+CREATE KEYSPACE ks1 WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
 DESCRIBE KEYSPACE ks1;
+
+create table ks1.transfer_events (
+    event TEXT PRIMARY KEY,
+    amount float,
+    currency TEXT
+);
+
+drop table ks1.transfer_events;
+
 
 CREATE TABLE ks1.users (
     user_id int,

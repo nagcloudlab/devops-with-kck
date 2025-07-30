@@ -21,6 +21,7 @@ public class Interceptor implements org.apache.kafka.clients.producer.ProducerIn
 
     @Override
     public void onAcknowledgement(RecordMetadata metadata, Exception exception) {
+        // track the acknowledgment of the record
     }
 
     @Override
