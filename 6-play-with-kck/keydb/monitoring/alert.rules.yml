@@ -11,7 +11,7 @@ groups:
           description: "No scrape data for keydb-master1 in last 30s"
 
       - alert: KeyDB_Replication_Lag
-        expr: (redis_master_repl_offset{container="keydb-master1"} - redis_slave_repl_offset{container="keydb-replica"}) > 10000
+        expr: (redis_master_repl_offset{instance="redis-exporter-m1:9121",job="keydb-master1"} - scalar(redis_slave_repl_offset{instance="redis-exporter-replica:9121", job="keydb-replica", master_host="keydb-master1", master_port="6379"})) > 10000
         for: 1m
         labels:
           severity: warning

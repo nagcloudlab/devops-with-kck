@@ -7,7 +7,7 @@ import redis.clients.jedis.resps.ScanResult;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ReaderClient {
+public class ReaderClient2 {
 
     public static void main(String[] args) throws InterruptedException {
         String replicaHost = "localhost";

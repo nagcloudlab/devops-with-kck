@@ -1,7 +1,7 @@
 #!/bin/bash
 
 M1=keydb-master1
-R1=keydb-replica1
+R1=keydb-replica
 
 echo "🧹 Healing M1 ↛ R1 partition..."
 

@@ -14,6 +14,7 @@ public class Client1WithM1AndM2 {
     private static final JedisPoolConfig poolConfig = buildPoolConfig();
 
     private static final JedisPool poolM1 = new JedisPool(poolConfig, "localhost", 6379);
+
     private static final JedisPool poolM2 = new JedisPool(poolConfig, "localhost", 6380);
 
     public static void main(String[] args) throws InterruptedException {
