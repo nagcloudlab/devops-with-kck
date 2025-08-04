@@ -144,28 +144,38 @@ curl -X GET http://localhost:8083/connector-plugins
 
 create cassandra sink connector
 ```bash
+
 curl -X POST -H "Content-Type: application/json" --data '{
   "name": "cassandra-sink-connector",
   "config": {
     "connector.class": "com.datastax.oss.kafka.sink.CassandraSinkConnector",
     "tasks.max": "1",
+
     "topics": "transfer-events",
-    
-    "contactPoints": "localhost",                 
-    "port": "9042",                               
-    "loadBalancing.localDc": "datacenter1",       
+    "topic.transfer-events.finance.transfer_events.mapping": "transaction_id=value.transaction_id, from_account=value.from_account, to_account=value.to_account, amount=value.amount, currency=value.currency, transfer_type=value.transfer_type, timestamp=value.timestamp, status=value.status, failure_reason=value.failure_reason",
 
-    "keyspace": "ks1",                            
+    "cassandra.contact.points": "localhost",
+    "cassandra.port": "9042",
+    "cassandra.keyspace": "finance",
+    "load.balance.local.dc": "datacenter1",
 
-    "topic.transfer-events.ks1.transfer_events.mapping": "transaction_id=value.transaction_id,from_account=value.from_account,to_account=value.to_account,amount=value.amount,currency=value.currency,transfer_type=value.transfer_type,timestamp=value.timestamp,status=value.status,failure_reason=value.failure_reason",
+    "cassandra.consistency.level": "QUORUM",
+    "cassandra.write.timeout.ms": "3000",
+    "cassandra.read.timeout.ms": "3000",
+    "cassandra.batch.size.rows": "32",
 
-    "topic.transfer-events.ks1.transfer_events.consistencyLevel": "QUORUM",
-    "topic.transfer-events.ks1.transfer_events.ttl": "0",
+    "cassandra.schema.refresh.interval.ms": "30000",
+    "cassandra.schema.autocreate": "true",
+    "cassandra.schema.autoupdate": "true",
 
-    "maxConcurrentRequests": "500",
-    "queryExecutionTimeoutMillis": "10000"
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "key.converter.schemas.enable": "false"
   }
 }' http://localhost:8083/connectors
+
 
 ```
 
@@ -224,11 +234,41 @@ export KAFKA_OPTS="-javaagent:/Users/nag/devops-with-kck/5-play-with-kafka/jmx_e
 Kafka Exporter
 -------------------------------------------------
 
+
 ```bash
-docker run -d \
-  -p 9308:9308 \
-  -e KAFKA_BROKER=host.docker.internal:9092 \
-  danielqsj/kafka-exporter \
-  --kafka.server=host.docker.internal:9092 \
-  --log.level=info
+# Download Kafka Exporter
+mkdir kafka_exporter
+cd kafka_exporter
+wget https://github.com/danielqsj/kafka_exporter/releases/download/v1.9.0/kafka_exporter-1.9.0.darwin-amd64.tar.gz
+tar -xzf kafka_exporter-1.9.0.darwin-amd64.tar.gz
+cd kafka_exporter-1.9.0.darwin-amd64
 ```
+
+```bash
+# Run Kafka Exporter
+./kafka_exporter --kafka.server=localhost:9092 --web.listen-address=:9308 --web.telemetry-path=/metrics
+```
+
+
+
+How to run producer and consumer java clients
+-------------------------------------------------
+
+```bash
+sudo apt install maven
+cd producer-client
+mvn clean compile exec:java -Dexec.mainClass="com.example.ProducerClient"
+```
+
+```bash
+cd consumer-client
+mvn clean compile exec:java -Dexec.mainClass="com.example.ConsumerClient"
+```
+
+
+
+
+edit number of partitions
+```bash
+kafka1/bin/kafka-topics.sh --bootstrap-server localhost:9092 --alter --topic topic5 --partitions 5
+``

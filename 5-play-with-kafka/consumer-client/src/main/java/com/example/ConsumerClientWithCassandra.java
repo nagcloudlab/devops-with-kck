@@ -12,7 +12,6 @@ import java.net.InetSocketAddress;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 public class ConsumerClientWithCassandra {
 
@@ -39,7 +38,7 @@ public class ConsumerClientWithCassandra {
         // -------------------------- Kafka Configuration --------------------------
         Properties props = new Properties();
         props.put("client.id", "consumer-client-1");
-        props.put("group.id", "cg1");
+        props.put("group.id", "g2");
         props.put("bootstrap.servers", "localhost:9092,localhost:9093,localhost:9094");
         props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
@@ -90,7 +89,7 @@ public class ConsumerClientWithCassandra {
 
                     System.out.printf("✅ Persisted TxID: %s | Status: %s%n", txId, status);
 
-                    TimeUnit.MILLISECONDS.sleep(3); // Simulate processing
+                    // TimeUnit.MILLISECONDS.sleep(3); // Simulate processing
                 } catch (Exception e) {
                     System.err.printf("❌ Failed to process message: %s%n", e.getMessage());
                 }

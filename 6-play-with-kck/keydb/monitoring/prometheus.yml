@@ -1,0 +1,24 @@
+global:
+  scrape_interval: 5s
+
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets:
+#             - 'alertmanager:9093'
+
+rule_files:
+  - "alert.rules.yml"  
+
+scrape_configs:
+  - job_name: 'keydb-master1'
+    static_configs:
+      - targets: ['redis-exporter-m1:9121']
+
+  - job_name: 'keydb-master2'
+    static_configs:
+      - targets: ['redis-exporter-m2:9121']
+
+  - job_name: 'keydb-replica'
+    static_configs:
+      - targets: ['redis-exporter-replica:9121']

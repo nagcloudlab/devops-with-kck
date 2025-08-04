@@ -1,0 +1,28 @@
+groups:
+  - name: keydb-rules
+    rules:
+      - alert: KeyDB_M1_Down
+        expr: up{container="keydb-master1"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "KeyDB Master1 is DOWN"
+          description: "No scrape data for keydb-master1 in last 30s"
+
+      - alert: KeyDB_Replication_Lag
+        expr: (redis_master_repl_offset{container="keydb-master1"} - redis_slave_repl_offset{container="keydb-replica"}) > 10000
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Replication lag detected"
+          description: "Replica is lagging behind master by more than 10,000 bytes"
+
+      - alert: High_Memory_Usage
+        expr: redis_memory_used_bytes / redis_memory_max_bytes > 0.8
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage detected"

@@ -1,0 +1,18 @@
+global:
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'your-alerts@gmail.com'
+  smtp_auth_username: 'your-alerts@gmail.com'
+  smtp_auth_password: 'your-app-password'  # Use App Password, not Gmail login
+  smtp_require_tls: true
+
+route:
+  receiver: email-receiver
+  group_wait: 10s
+  group_interval: 30s
+  repeat_interval: 1h
+
+receivers:
+  - name: email-receiver
+    email_configs:
+      - to: 'your-recipient@gmail.com'
+        send_resolved: true

@@ -18,7 +18,7 @@ public class ConsumerClient {
         // ----------------------------------
         Properties props = new Properties();
         props.put("client.id", "consumer-client-1"); // Logical consumer ID
-        props.put("group.id", "g2"); // Consumer group ID
+        props.put("group.id", "g1"); // Consumer group ID
 
         // Cluster Connectivity
         // ----------------------------------
